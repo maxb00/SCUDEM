@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 # globals true for every population
-pi = 0.55 # proportion of normal pop increase
+pi = 0.74 # proportion of normal pop increase
 pd = 0.75 # proportion of normal pop decrease
 pop_max = 20000 # population maximum
 generations = 200
@@ -65,18 +65,18 @@ def growth(ri, re, pi, pd, type=None):
 def load_live_data():
     '''Holds data for birds who steal live hairs'''
     # maximums
-    beta = 0.15
-    att_max = 0.5
-    infect_max = 0.5
-    rho_max = 0.5 # predator constant
-    eta_max = 0.5 # parasite constant
+    beta = 0
+    att_max = 1
+    infect_max = 1
+    rho_max = 0 # predator constant
+    eta_max = 1 # parasite constant
 
     # actives (max be moved)
     theta = pi / 6 # range 0 - pi, min at pi/2
-    att = 0.1
-    infect = 0.05
-    rho = 0.15
-    eta = 0.075
+    att = 0
+    infect = 0
+    rho = 0
+    eta = 5
 
     return [beta, att_max, infect_max, rho_max, eta_max], [theta, att, infect, rho, eta]
 
