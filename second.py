@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 
 
 # globals true for every population
-pi = 3.5 # proportion of normal pop increase
+pi = 2.6 # proportion of normal pop increase
 pd = 0.75 # proportion of normal pop decrease
 pop_max = 20000 # population maximum
-single_pop_max = 100000
+single_pop_max = 10000
 generations = 100
 single_pop_generations = 50
 
@@ -122,12 +122,11 @@ def load_nohair_data():
 
 def main():
     # initialize populations
-    pop_live = 5000
+    pop_live = 9000
     pop_dead = 5000
     pop_nohair = 5000
 
     # initialize history lists
-    live_history = [pop_live]
     dead_history = [pop_dead]
     nohair_history = [pop_nohair]
 
@@ -149,6 +148,7 @@ def main():
     plt.show()
 
     pop_live = 5000
+    live_history = [pop_live]
     # run years, saving history
     for _ in range(1, generations): # 100 years
         # load data
