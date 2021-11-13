@@ -7,11 +7,12 @@ import matplotlib.pyplot as plt
 
 
 # globals true for every population
-pi = 0.74 # proportion of normal pop increase
+pi = 3.5 # proportion of normal pop increase
 pd = 0.75 # proportion of normal pop decrease
 pop_max = 20000 # population maximum
-generations = 200
-
+single_pop_max = 100000
+generations = 100
+single_pop_generations = 50
 
 # computational functions (building system)
 def temp(theta, beta):
@@ -65,18 +66,18 @@ def growth(ri, re, pi, pd, type=None):
 def load_live_data():
     '''Holds data for birds who steal live hairs'''
     # maximums
-    beta = 0
-    att_max = 1
-    infect_max = 1
-    rho_max = 0 # predator constant
-    eta_max = 1 # parasite constant
+    beta = 0.15
+    att_max = 0.5
+    infect_max = 0.5
+    rho_max = 0.5 # predator constant
+    eta_max = 0.5 # parasite constant
 
     # actives (max be moved)
     theta = pi / 6 # range 0 - pi, min at pi/2
-    att = 0
-    infect = 0
-    rho = 0
-    eta = 5
+    att = 0.1
+    infect = 0.05
+    rho = 0.15
+    eta = 0.075
 
     return [beta, att_max, infect_max, rho_max, eta_max], [theta, att, infect, rho, eta]
 
@@ -130,6 +131,24 @@ def main():
     dead_history = [pop_dead]
     nohair_history = [pop_nohair]
 
+    # run years, saving history, live only
+    single_pop_history = [pop_live]
+    for _ in range(single_pop_generations):
+        beta, att_max, infect_max, rho_max, eta_max = load_live_data()[0]
+        theta, att, infect, rho, eta = load_live_data()[1]
+        pop_growth = growth(risk(att, att_max, infect, infect_max), reward(rho, rho_max, eta, eta_max, beta, theta), pi, pd)
+        pop_live += pop_growth * pop_live * (1-pop_live/single_pop_max)
+        single_pop_history.append(pop_live)
+
+    # plot single pop history
+    plt.plot(single_pop_history, label='live')
+    plt.legend()
+    plt.title('Single Population History')
+    plt.xlabel('Generations')
+    plt.ylabel('Population')
+    plt.show()
+
+    pop_live = 5000
     # run years, saving history
     for _ in range(1, generations): # 100 years
         # load data
@@ -179,7 +198,7 @@ def main():
     plt.legend()
     plt.show()
 
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
 if __name__ == '__main__':
     main()
