@@ -2,7 +2,7 @@
 # modeling population change in birds who steal hair from live animals.
 from math import cos
 from math import pi as p
-# import numpy as
+# import numpy as  
 import matplotlib.pyplot as plt
 
 
@@ -206,8 +206,6 @@ def main():
     plt.plot(nohair_history, label='nohair')
     plt.legend()
     plt.show()
-
-    # import pdb; pdb.set_trace()
 
 
 if __name__ == '__main__':
