@@ -2,17 +2,18 @@
 # modeling population change in birds who steal hair from live animals.
 from math import cos
 from math import pi as p
-import numpy as np
+# import numpy as  
 import matplotlib.pyplot as plt
 
 
 # globals true for every population
-pi = 0.05 # proportion of normal pop increase
-pd = 0.75 # proportion of normal pop decrease
-pop_max = 20000 # population maximum
+pi = 3.5  # proportion of normal pop increase
+pd = 0.75  # proportion of normal pop decrease
+pop_max = 20000  # population maximum
 single_pop_max = 10000
-generations = 100
+generations = 1000
 single_pop_generations = 50
+
 
 # computational functions (building system)
 def temp(theta, beta):
@@ -45,7 +46,7 @@ def growth(ri, re, pi, pd, type=None):
             return pi - pd
         else:
             # whoops? just in case
-            condition = re >= (ri * (1 - pd)) # Piecewise condition
+            condition = re >= (ri * (1 - pd))  # Piecewise condition
             if condition:
                 # piecewise part 1
                 return pi + re - pd - (ri * (1 - pd))
@@ -53,14 +54,14 @@ def growth(ri, re, pi, pd, type=None):
                 # piecewise part 2
                 return pi - pd
     else:
-        condition = re >= (ri * (1 - pd)) # Piecewise condition
+        condition = re >= (ri * (1 - pd))  # Piecewise condition
         if condition:
             # piecewise part 1
             return pi + re - pd - (ri * (1 - pd))
         else:
             # piecewise part 2
             return pi - pd
-    
+
 
 # Data functions
 def load_live_data():
@@ -69,11 +70,11 @@ def load_live_data():
     beta = 0.15
     att_max = 0.5
     infect_max = 0.5
-    rho_max = 0.5 # predator constant
-    eta_max = 0.5 # parasite constant
+    rho_max = 0.5  # predator constant
+    eta_max = 0.5  # parasite constant
 
     # actives (max be moved)
-    theta = pi / 6 # range 0 - pi, min at pi/2
+    theta = pi / 6  # range 0 - pi, min at pi/2
     att = 0.1
     infect = 0.05
     rho = 0.15
@@ -88,11 +89,11 @@ def load_dead_data():
     beta = 0.12
     att_max = 0.5
     infect_max = 0.5
-    rho_max = 0.5 # predator constant
-    eta_max = 0.5 # parasite constant
+    rho_max = 0.5  # predator constant
+    eta_max = 0.5  # parasite constant
 
     # actives (max be moved)
-    theta = pi / 3 # range 0 - pi, min at pi/2
+    theta = pi / 3  # range 0 - pi, min at pi/2
     att = 0.05
     infect = 0.2
     rho = 0.05
@@ -107,11 +108,11 @@ def load_nohair_data():
     beta = 0.12
     att_max = 0.5
     infect_max = 0.5
-    rho_max = 0.5 # predator constant
-    eta_max = 0.5 # parasite constant
+    rho_max = 0.5  # predator constant
+    eta_max = 0.5  # parasite constant
 
     # actives (max be moved)
-    theta = 0 # range 0 - pi, max at pi/2
+    theta = 0  # range 0 - pi, max at pi/2
     att = 0.001
     infect = 0.05
     rho = 0.2
@@ -136,7 +137,8 @@ def main():
     for _ in range(single_pop_generations):
         beta, att_max, infect_max, rho_max, eta_max = load_live_data()[0]
         theta, att, infect, rho, eta = load_live_data()[1]
-        pop_growth = growth(risk(att, att_max, infect, infect_max), reward(rho, rho_max, eta, eta_max, beta, theta), pi, pd)
+        pop_growth = growth(risk(att, att_max, infect, infect_max), reward(
+            rho, rho_max, eta, eta_max, beta, theta), pi, pd)
         pop_live += pop_growth * pop_live * (1-pop_live/single_pop_max)
         single_pop_history.append(pop_live)
 
@@ -150,36 +152,43 @@ def main():
 
     pop_live = 5000
     # run years, saving history
-    for _ in range(1, generations): # 100 years
+    for _ in range(1, generations):  # 100 years
         # load data
-        [beta, att_max, infect_max, rho_max, eta_max], [theta, att, infect, rho, eta] = load_live_data()
+        [beta, att_max, infect_max, rho_max, eta_max], [
+            theta, att, infect, rho, eta] = load_live_data()
         # calculate risk and reward
         risk_live = risk(att, att_max, infect, infect_max)
         reward_live = reward(rho, rho_max, eta, eta_max, beta, theta)
         # calculate growth
         growth_live = growth(risk_live, reward_live, pi, pd, type='live')
         # update population
-        pop_live_change = growth_live * pop_live * (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
+        pop_live_change = growth_live * pop_live * \
+            (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
 
         # load data dead hairs
-        [beta, att_max, infect_max, rho_max, eta_max], [theta, att, infect, rho, eta] = load_dead_data()
+        [beta, att_max, infect_max, rho_max, eta_max], [
+            theta, att, infect, rho, eta] = load_dead_data()
         # calculate risk and reward
         risk_dead = risk(att, att_max, infect, infect_max)
         reward_dead = reward(rho, rho_max, eta, eta_max, beta, theta)
         # calculate growth
         growth_dead = growth(risk_dead, reward_dead, pi, pd, type='dead')
         # update population
-        pop_dead_change = growth_dead * pop_dead * (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
+        pop_dead_change = growth_dead * pop_dead * \
+            (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
 
         # load data no hairs
-        [beta, att_max, infect_max, rho_max, eta_max], [theta, att, infect, rho, eta] = load_nohair_data()
+        [beta, att_max, infect_max, rho_max, eta_max], [
+            theta, att, infect, rho, eta] = load_nohair_data()
         # calculate risk and reward
         risk_nohair = risk(att, att_max, infect, infect_max)
         reward_nohair = reward(rho, rho_max, eta, eta_max, beta, theta)
         # calculate growth
-        growth_nohair = growth(risk_nohair, reward_nohair, pi, pd, type='nohair')
+        growth_nohair = growth(
+            risk_nohair, reward_nohair, pi, pd, type='nohair')
         # update population
-        pop_nohair_change = growth_nohair * pop_nohair * (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
+        pop_nohair_change = growth_nohair * pop_nohair * \
+            (1 - ((pop_live + pop_dead + pop_nohair) / pop_max))
 
         # update populations
         pop_live += pop_live_change
@@ -199,6 +208,7 @@ def main():
     plt.show()
 
     # import pdb; pdb.set_trace()
+
 
 if __name__ == '__main__':
     main()
